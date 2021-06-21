@@ -38,12 +38,9 @@ const TestTypeStyleBundle = (types: string[]): CustomTypeStyle | undefined => {
   }
   if (
     types.includes('http://xmlns.com/foaf/0.1/Person') ||
-    types.includes('http://www.wikidata.org/entity/Q5')
+    types.includes('http://purl.org/bdm2Person')
   ) {
-    return { color: '#eb7777', icon: null };
-  }
-  if (types.includes('http://www.wikidata.org/entity/Q6256')) {
-    return { color: '#77ca98', icon: null };
+    return { color: '#eb7777', icon: './icons/user.svg' };
   }
   if (
     types.includes('http://schema.org/Organization') ||
@@ -58,12 +55,6 @@ const TestTypeStyleBundle = (types: string[]): CustomTypeStyle | undefined => {
     types.includes('http://www.w3.org/2003/01/geo/wgs84_pos#Point')
   ) {
     return { color: '#bebc71', icon: null };
-  }
-  if (types.includes('http://www.wikidata.org/entity/Q1190554')) {
-    return { color: '#b4b1fb', icon: null };
-  }
-  if (types.includes('http://www.wikidata.org/entity/Q488383')) {
-    return { color: '#53ccb2', icon: null };
   }
   return;
 };
