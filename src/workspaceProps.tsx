@@ -87,8 +87,25 @@ function onWorkspaceMounted(workspace: Workspace) {
    * we pickup the OWLRDFSSetting and replace some of the queries with stardog variants
    */
   const SparqlDialect = Ontodia.OWLRDFSSettings;
+
+  SparqlDialect.defaultPrefix = `PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+    PREFIX dcterms:  <http://purl.org/dc/terms/>
+    PREFIX o:  <http://omeka.org/s/vocabs/o#>
+    PREFIX schema:  <http://schema.org/>
+
+    `
+
+  SparqlDialect.classTreeQuery = `
+  SELECT distinct ?class ?label ?parent WHERE {
+    ?inst a ?class . 
+    BIND(STR(?class) AS ?label)
+  }
+`
+
   /**
-   * user Stardog defined functions, requires FT search to be enabled
+   * simple regex query on labels
    */
   SparqlDialect.fullTextSearch = {
     prefix: '',
@@ -101,14 +118,42 @@ function onWorkspaceMounted(workspace: Workspace) {
             FILTER regex(?searchLabel, "\${text}", "i")
             `,
           };
-          // (?searchLabel ?score) <tag:stardog:api:property:textMatch> "\${text}".
   /**
    * replace filter type for performance improvements
    */
-  SparqlDialect.filterTypePattern = '?inst a ?class';
+  // SparqlDialect.filterTypePattern = '?inst a ?class';
 
+  /**
+   * Add all strings used as labels in Birgitta dataset :-(
+   */
   SparqlDialect.dataLabelProperty = 'rdfs:label|<http://purl.org/dc/terms/title>|<http://omeka.org/s/vocabs/o#title>|<http://schema.org/object>/<http://omeka.org/s/vocabs/o#title>|<http://schema.org/name>/<http://omeka.org/s/vocabs/o#label>';
-  SparqlDialect.filterAdditionalRestriction = ''
+  
+  /**
+   * Filter Omeka props
+   */
+  SparqlDialect.linkTypesOfQuery = `SELECT DISTINCT ?link
+  WHERE {
+    {
+      \${elementIri} ?link ?outObject
+      # this is to prevent some junk appear on diagram,
+      # but can really slow down execution on complex objects
+      FILTER(?link NOT IN (<http://omeka.org/s/vocabs/o#owner>, <http://omeka.org/s/vocabs/o#resource_template>, <http://omeka.org/s/vocabs/o#resource_class>))
+      #FILTER ISIRI(?outObject)
+      #FILTER EXISTS { ?outObject ?someprop ?someobj }
+    } UNION {
+      ?inObject ?link \${elementIri}
+      FILTER(?link NOT IN (<http://omeka.org/s/vocabs/o#owner>, <http://omeka.org/s/vocabs/o#resource_template>, <http://omeka.org/s/vocabs/o#resource_class>))
+      #FILTER ISIRI(?inObject)
+      #FILTER EXISTS { ?inObject ?someprop ?someobj }
+    }
+  }`
+
+  SparqlDialect.filterTypePattern = "?inst a ?instType. ?instType <http://www.w3.org/2000/01/rdf-schema#subClassOf>* ?class",
+  /**
+   * Filter omeka objects
+   */
+  SparqlDialect.filterRefElementLinkPattern = 'FILTER(?link NOT IN (<http://omeka.org/s/vocabs/o#owner>, <http://omeka.org/s/vocabs/o#resource_template>, <http://omeka.org/s/vocabs/o#resource_class>))'
+  console.log(SparqlDialect)
   /**
    * Add public endpoint and refer to our modified dialect
    */
