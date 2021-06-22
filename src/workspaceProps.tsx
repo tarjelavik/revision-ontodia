@@ -38,23 +38,59 @@ const TestTypeStyleBundle = (types: string[]): CustomTypeStyle | undefined => {
   }
   if (
     types.includes('http://xmlns.com/foaf/0.1/Person') ||
-    types.includes('http://purl.org/bdm2Person')
+    types.includes('http://purl.org/bdm2Person') ||
+    types.includes('http://purl.org/bdm2#Person')
   ) {
-    return { color: '#eb7777', icon: './icons/user.svg' };
+    return { color: '#eb7777', icon: './icons/user-svgrepo-com.svg' };
   }
   if (
     types.includes('http://schema.org/Organization') ||
     types.includes('http://dbpedia.org/ontology/Organisation') ||
     types.includes('http://xmlns.com/foaf/0.1/Organization') ||
-    types.includes('http://www.wikidata.org/entity/Q43229')
+    types.includes('http://purl.org/bdm2Institution') ||
+    types.includes('http://purl.org/bdm2#Institution') ||
+    types.includes('http://purl.org/bdm2ModernInstitution') ||
+    types.includes('http://purl.org/bdm2#ModernInstitution')
   ) {
-    return { color: '#77ca98', icon: null };
+    return { color: '#77ca98', icon: './icons/library-building-svgrepo-com.svg' };
   }
   if (
     types.includes('http://www.wikidata.org/entity/Q618123') ||
-    types.includes('http://www.w3.org/2003/01/geo/wgs84_pos#Point')
+    types.includes('http://www.w3.org/2003/01/geo/wgs84_pos#Point') ||
+    types.includes('http://purl.org/bdm2Place') ||
+    types.includes('http://purl.org/bdm2#Place')
   ) {
-    return { color: '#bebc71', icon: null };
+    return { color: '#bebc71', icon: './icons/pin-svgrepo-com.svg' };
+  }
+  if (
+    types.includes('http://purl.org/bdm2Work') ||
+    types.includes('http://purl.org/bdm2#Work')
+  ) {
+    return { color: '#bebc71', icon: './icons/work-svgrepo-com.svg' };
+  }
+  if (
+    types.includes('http://purl.org/bdm2BookObject') ||
+    types.includes('http://purl.org/bdm2#BookObject')
+  ) {
+    return { color: '#bebc71', icon: './icons/book-item-svgrepo-com.svg' };
+  }
+  if (
+    types.includes('http://purl.org/bdm2WorkItem') ||
+    types.includes('http://purl.org/bdm2#WorkItem')
+  ) {
+    return { color: '#bebc71', icon: './icons/work-item-svgrepo-com.svg' };
+  }
+  if (
+    types.includes('http://purl.org/bdm2Action') ||
+    types.includes('http://purl.org/bdm2#Action')
+  ) {
+    return { color: '#bebc71', icon: './icons/action-svgrepo-com.svg' };
+  }
+  if (
+    types.includes('http://schema.org/Event') ||
+    types.includes('http://schema.org/Event')
+  ) {
+    return { color: '#bebc71', icon: './icons/event-svgrepo-com.svg' };
   }
   return;
 };
@@ -89,11 +125,11 @@ function onWorkspaceMounted(workspace: Workspace) {
     `
 
   SparqlDialect.classTreeQuery = `
-  SELECT distinct ?class ?label ?parent WHERE {
-    ?inst a ?class . 
-    BIND(STR(?class) AS ?label)
-  }
-`
+    SELECT distinct ?class ?label ?parent WHERE {
+      ?inst a ?class . 
+      BIND(STR(?class) AS ?label)
+    }
+  `
 
   /**
    * simple regex query on labels
@@ -112,7 +148,7 @@ function onWorkspaceMounted(workspace: Workspace) {
   /**
    * replace filter type for performance improvements
    */
-  // SparqlDialect.filterTypePattern = '?inst a ?class';
+  SparqlDialect.filterTypePattern = '?inst a ?class';
 
   /**
    * Add all strings used as labels in Birgitta dataset :-(
@@ -143,7 +179,7 @@ function onWorkspaceMounted(workspace: Workspace) {
   /**
    * Filter omeka objects
    */
-  SparqlDialect.filterRefElementLinkPattern = 'FILTER(?link NOT IN (<http://omeka.org/s/vocabs/o#owner>, <http://omeka.org/s/vocabs/o#resource_template>, <http://omeka.org/s/vocabs/o#resource_class>))'
+  SparqlDialect.filterRefElementLinkPattern = 'FILTER(?link NOT IN (<http://omeka.org/s/vocabs/o#owner>, <http://omeka.org/s/vocabs/o#resource_template>, <http://omeka.org/s/vocabs/o#resource_class>)) . FILTER(?inst != <http://omeka.org/s/vocabs/o#Item>)'
   console.log(SparqlDialect)
   /**
    * Add public endpoint and refer to our modified dialect
