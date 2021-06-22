@@ -66,31 +66,31 @@ const TestTypeStyleBundle = (types: string[]): CustomTypeStyle | undefined => {
     types.includes('http://purl.org/bdm2Work') ||
     types.includes('http://purl.org/bdm2#Work')
   ) {
-    return { color: '#bebc71', icon: './icons/work-svgrepo-com.svg' };
+    return { color: '#DA4167', icon: './icons/work-svgrepo-com.svg' };
   }
   if (
     types.includes('http://purl.org/bdm2BookObject') ||
     types.includes('http://purl.org/bdm2#BookObject')
   ) {
-    return { color: '#bebc71', icon: './icons/book-item-svgrepo-com.svg' };
+    return { color: '#F4D35E', icon: './icons/book-item-svgrepo-com.svg' };
   }
   if (
     types.includes('http://purl.org/bdm2WorkItem') ||
     types.includes('http://purl.org/bdm2#WorkItem')
   ) {
-    return { color: '#bebc71', icon: './icons/work-item-svgrepo-com.svg' };
+    return { color: '#F6D8AE', icon: './icons/work-item-svgrepo-com.svg' };
   }
   if (
     types.includes('http://purl.org/bdm2Action') ||
     types.includes('http://purl.org/bdm2#Action')
   ) {
-    return { color: '#bebc71', icon: './icons/action-svgrepo-com.svg' };
+    return { color: '#083D77', icon: './icons/action-svgrepo-com.svg' };
   }
   if (
     types.includes('http://schema.org/Event') ||
     types.includes('http://schema.org/Event')
   ) {
-    return { color: '#bebc71', icon: './icons/event-svgrepo-com.svg' };
+    return { color: '#2E4057', icon: './icons/event-svgrepo-com.svg' };
   }
   return;
 };
