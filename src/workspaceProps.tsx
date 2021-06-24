@@ -16,6 +16,7 @@ import { ClassAttributes } from 'react';
 // import { Toolbar } from './toolbarCustomization';
 import { DefaultToolbar } from './templates/toolbar';
 import { TestTemplate } from './templates/testtemplate';
+import { PlaceTemplate } from './templates/placetemplate';
 import { DefaultTemplate } from './templates/defaulttemplate';
 import { startDiagram, birgittaDiagram } from './diagrams'
 
@@ -178,7 +179,7 @@ function onWorkspaceMounted(workspace: Workspace) {
    * Filter omeka objects
    */
   SparqlDialect.filterRefElementLinkPattern = 'FILTER(?link NOT IN (<http://omeka.org/s/vocabs/o#owner>, <http://omeka.org/s/vocabs/o#resource_template>, <http://omeka.org/s/vocabs/o#resource_class>)) . FILTER(?inst != <http://omeka.org/s/vocabs/o#Item>)'
-  console.log(SparqlDialect)
+
   /**
    * Add public endpoint and refer to our modified dialect
    */
@@ -229,9 +230,9 @@ function onWorkspaceMounted(workspace: Workspace) {
  */
 function templateResolver(types: string[]): ElementTemplate | undefined {
   // if we have geos:Geometry then use the test template to draw a map, all other default
-  if (types.includes('http://www.opengis.net/ont/geosparql#Geometry')) {
+  if (types.includes('http://purl.org/bdm2/Place')) {
     // see templates/testtemplate.tsx
-    return TestTemplate;
+    return PlaceTemplate;
   }
   // see defaulttemplate.tsx
   return DefaultTemplate;

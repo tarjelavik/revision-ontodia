@@ -4,7 +4,6 @@ import {
   ElementIri,
   ElementModel,
   Dictionary,
-  LocalizedString,
   Property,
 } from '../../node_modules/ontodia/src/ontodia/data/model';
 
@@ -13,26 +12,6 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import * as L from 'leaflet';
 import 'leaflet-defaulticon-compatibility';
 
-const Wkt = require('wicket');
-
-type Coord = { x: number; y: number };
-interface Wkt {
-  delimiter: string;
-  wrapVertices: string;
-  regExes: string;
-  components: string;
-  isCollection(): boolean;
-  sameCoords(a: Coord, b: Coord): boolean;
-  fromObject(obj: any): Wkt;
-  toObject(config?: any): any;
-  toString(config?: any): string;
-  fromJson(obj: string): Wkt;
-  toJson(): string;
-  merge(wkt: string): Wkt;
-  read(str: string): Wkt;
-  write(components?: Array<any>): string;
-  isRectangle: boolean;
-}
 
 export type PropArray = Array<{
   id: string;
@@ -57,18 +36,24 @@ export interface TemplateProps {
 export class TestTemplate extends React.Component<TemplateProps, {}> {
   componentDidMount(): void {
     // create map
-    const wicket = new Wkt.Wkt();
-    let wicketGeom;
-    this.props.propsAsList.some(({ name, id, property }) => {
-      if (id === 'http://www.opengis.net/ont/geosparql#asWKT') {
-        wicketGeom = property.values[0].value;
+    const long = this.props.propsAsList.map(({ name, id, property }) => {
+      if (id === 'http://schema.org/longitude') {
+        return +property.values[0].value;
       }
-      return true;
-    });
-    wicket.read(wicketGeom);
-    const location = wicket.toJson();
+    })
+    const lat = this.props.propsAsList.map(({ name, id, property }) => {
+      if (id === 'http://schema.org/latitude') {
+        return +property.values[0].value;
+      }
+    })
+
+    const coord = {
+      x: lat.filter(Boolean)[0],
+      y: long.filter(Boolean)[0]
+    }
+ 
     const map = L.map('map-' + this.props.elementId, {
-      center: [location.coordinates[1], location.coordinates[0]],
+      center: [coord.x, coord.y],
       zoom: 16,
       layers: [
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -83,9 +68,9 @@ export class TestTemplate extends React.Component<TemplateProps, {}> {
     map.boxZoom.disable();
     map.keyboard.disable();
     if (map.tap) map.tap.disable();
-    L.marker([location.coordinates[1], location.coordinates[0]]).addTo(map);
+    L.marker([coord.x, coord.y]).addTo(map);
   }
-
+  
   render(): JSX.Element {
     const propsAsList = this.props.propsAsList
       .map(({ name, id, property }) => {
