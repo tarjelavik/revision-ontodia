@@ -163,12 +163,12 @@ function onWorkspaceMounted(workspace: Workspace) {
       \${elementIri} ?link ?outObject
       # this is to prevent some junk appear on diagram,
       # but can really slow down execution on complex objects
-      FILTER(?link NOT IN (<http://omeka.org/s/vocabs/o#owner>, <http://omeka.org/s/vocabs/o#resource_template>, <http://omeka.org/s/vocabs/o#resource_class>))
+      FILTER(?link NOT IN (<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, <http://omeka.org/s/vocabs/o#owner>, <http://omeka.org/s/vocabs/o#resource_template>, <http://omeka.org/s/vocabs/o#resource_class>))
       #FILTER ISIRI(?outObject)
       #FILTER EXISTS { ?outObject ?someprop ?someobj }
     } UNION {
       ?inObject ?link \${elementIri}
-      FILTER(?link NOT IN (<http://omeka.org/s/vocabs/o#owner>, <http://omeka.org/s/vocabs/o#resource_template>, <http://omeka.org/s/vocabs/o#resource_class>))
+      FILTER(?link NOT IN (<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, <http://omeka.org/s/vocabs/o#owner>, <http://omeka.org/s/vocabs/o#resource_template>, <http://omeka.org/s/vocabs/o#resource_class>))
       #FILTER ISIRI(?inObject)
       #FILTER EXISTS { ?inObject ?someprop ?someobj }
     }
@@ -178,7 +178,7 @@ function onWorkspaceMounted(workspace: Workspace) {
   /**
    * Filter omeka objects
    */
-  SparqlDialect.filterRefElementLinkPattern = 'FILTER(?link NOT IN (<http://omeka.org/s/vocabs/o#owner>, <http://omeka.org/s/vocabs/o#resource_template>, <http://omeka.org/s/vocabs/o#resource_class>)) . FILTER(?inst != <http://omeka.org/s/vocabs/o#Item>)'
+  SparqlDialect.filterRefElementLinkPattern = 'FILTER(?link NOT IN (<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, <http://omeka.org/s/vocabs/o#owner>, <http://omeka.org/s/vocabs/o#resource_template>, <http://omeka.org/s/vocabs/o#resource_class>)) . FILTER(?inst != <http://omeka.org/s/vocabs/o#Item>)'
 
   /**
    * Add public endpoint and refer to our modified dialect
