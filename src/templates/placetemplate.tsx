@@ -56,7 +56,7 @@ export class PlaceTemplate extends React.Component<TemplateProps, {}> {
       x: lat.filter(Boolean)[0],
       y: long.filter(Boolean)[0]
     }
- 
+
     const map = L.map('map-' + this.props.elementId, {
       center: [coord.x, coord.y],
       zoom: 16,
@@ -73,7 +73,9 @@ export class PlaceTemplate extends React.Component<TemplateProps, {}> {
     map.boxZoom.disable();
     map.keyboard.disable();
     if (map.tap) map.tap.disable();
-    L.marker([coord.x, coord.y]).addTo(map);
+    if (coord.x && coord.y) {
+      L.marker([coord.x, coord.y]).addTo(map);
+    }
   }
 
   render(): JSX.Element {
@@ -107,7 +109,7 @@ export class PlaceTemplate extends React.Component<TemplateProps, {}> {
                 </div>
               </div>
             </div>
-                <div id={'map-' + this.props.elementId} className="geo_point" />
+            <div id={'map-' + this.props.elementId} className="geo_point" />
           </div>
         </div>
         {isExpanded ? (

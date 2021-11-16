@@ -10,7 +10,7 @@ import {
   ElementModel,
   SerializedDiagram,
   ElementIri,
-  ElementTemplate
+  ElementTemplate,
 } from 'ontodia';
 import { ClassAttributes } from 'react';
 // import { Toolbar } from './toolbarCustomization';
@@ -18,7 +18,7 @@ import { DefaultToolbar } from './templates/toolbar';
 import { TestTemplate } from './templates/testtemplate';
 import { PlaceTemplate } from './templates/placetemplate';
 import { DefaultTemplate } from './templates/defaulttemplate';
-import { startDiagram, birgittaDiagram } from './diagrams'
+import { startDiagram, birgittaDiagram } from './diagrams';
 
 /**
  * This function returns a color and icon (null everywhere now) to canvas
@@ -53,7 +53,10 @@ const TestTypeStyleBundle = (types: string[]): CustomTypeStyle | undefined => {
     types.includes('http://purl.org/bdm2ModernInstitution') ||
     types.includes('http://purl.org/bdm2/ModernInstitution')
   ) {
-    return { color: '#77ca98', icon: './icons/library-building-svgrepo-com.svg' };
+    return {
+      color: '#77ca98',
+      icon: './icons/library-building-svgrepo-com.svg',
+    };
   }
   if (
     types.includes('http://www.wikidata.org/entity/Q618123') ||
@@ -87,9 +90,7 @@ const TestTypeStyleBundle = (types: string[]): CustomTypeStyle | undefined => {
   ) {
     return { color: '#083D77', icon: './icons/action-svgrepo-com.svg' };
   }
-  if (
-    types.includes('http://schema.org/Event')
-  ) {
+  if (types.includes('http://schema.org/Event')) {
     return { color: '#2E4057', icon: './icons/event-svgrepo-com.svg' };
   }
   return;
@@ -122,9 +123,9 @@ function onWorkspaceMounted(workspace: Workspace) {
     PREFIX o:  <http://omeka.org/s/vocabs/o#>
     PREFIX schema:  <http://schema.org/>
 
-    `
+    `;
 
-/*   SparqlDialect.classTreeQuery = `
+  /*   SparqlDialect.classTreeQuery = `
     SELECT distinct ?class ?label ?parent WHERE {
       ?inst a ?class . 
     }
@@ -137,13 +138,14 @@ function onWorkspaceMounted(workspace: Workspace) {
     prefix: '',
     queryPattern: `
             ?inst rdfs:label
+              | <http://purl.org/bdm2/shelfmark>
               | <http://purl.org/dc/terms/title>
               | <http://omeka.org/s/vocabs/o#title>
               | <http://schema.org/object>/<http://omeka.org/s/vocabs/o#title>
               | <http://schema.org/name>/<http://omeka.org/s/vocabs/o#label> ?searchLabel.
             FILTER regex(?searchLabel, "\${text}", "i")
             `,
-          };
+  };
   /**
    * replace filter type for performance improvements
    */
@@ -152,8 +154,9 @@ function onWorkspaceMounted(workspace: Workspace) {
   /**
    * Add all strings used as labels in Birgitta dataset :-(
    */
-  SparqlDialect.dataLabelProperty = 'rdfs:label|<http://purl.org/dc/terms/title>|<http://omeka.org/s/vocabs/o#title>|<http://schema.org/object>/<http://omeka.org/s/vocabs/o#title>|<http://schema.org/name>/<http://omeka.org/s/vocabs/o#label>';
-  
+  SparqlDialect.dataLabelProperty =
+    'rdfs:label|<http://purl.org/bdm2/shelfmark>|<http://purl.org/dc/terms/title>|<http://omeka.org/s/vocabs/o#title>|<http://schema.org/object>/<http://omeka.org/s/vocabs/o#title>|<http://schema.org/name>/<http://omeka.org/s/vocabs/o#label>';
+
   /**
    * Filter Omeka props
    */
@@ -172,13 +175,15 @@ function onWorkspaceMounted(workspace: Workspace) {
       #FILTER ISIRI(?inObject)
       #FILTER EXISTS { ?inObject ?someprop ?someobj }
     }
-  }`
+  }`;
 
-  SparqlDialect.filterTypePattern = "?inst a ?instType. ?instType <http://www.w3.org/2000/01/rdf-schema#subClassOf>* ?class",
-  /**
-   * Filter omeka objects
-   */
-  SparqlDialect.filterRefElementLinkPattern = 'FILTER(?link NOT IN (<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, <http://omeka.org/s/vocabs/o#owner>, <http://omeka.org/s/vocabs/o#resource_template>, <http://omeka.org/s/vocabs/o#resource_class>)) . FILTER(?inst != <http://omeka.org/s/vocabs/o#Item>)'
+  (SparqlDialect.filterTypePattern =
+    '?inst a ?instType. ?instType <http://www.w3.org/2000/01/rdf-schema#subClassOf>* ?class'),
+    /**
+     * Filter omeka objects
+     */
+    (SparqlDialect.filterRefElementLinkPattern =
+      'FILTER(?link NOT IN (<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, <http://omeka.org/s/vocabs/o#owner>, <http://omeka.org/s/vocabs/o#resource_template>, <http://omeka.org/s/vocabs/o#resource_class>)) . FILTER(?inst != <http://omeka.org/s/vocabs/o#Item>)');
 
   /**
    * Add public endpoint and refer to our modified dialect
@@ -192,12 +197,13 @@ function onWorkspaceMounted(workspace: Workspace) {
   } = {
     dataProvider: new Ontodia.SparqlDataProvider(
       {
-        endpointUrl: 'https://sparql.birgitta.uib.no/birgitta-revision-test/query',
+        endpointUrl:
+          'https://sparql.birgitta.uib.no/birgitta-revision-test/query',
         queryMethod: Ontodia.SparqlQueryMethod.GET,
       },
       SparqlDialect
     ),
-    diagram: JSON.parse(LZString.decompressFromBase64(birgittaDiagram))
+    diagram: JSON.parse(LZString.decompressFromBase64(birgittaDiagram)),
   };
 
   // load serialized data from URL if any

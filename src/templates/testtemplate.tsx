@@ -12,7 +12,6 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import * as L from 'leaflet';
 import 'leaflet-defaulticon-compatibility';
 
-
 export type PropArray = Array<{
   id: string;
   name: string;
@@ -40,18 +39,18 @@ export class TestTemplate extends React.Component<TemplateProps, {}> {
       if (id === 'http://schema.org/longitude') {
         return +property.values[0].value;
       }
-    })
+    });
     const lat = this.props.propsAsList.map(({ name, id, property }) => {
       if (id === 'http://schema.org/latitude') {
         return +property.values[0].value;
       }
-    })
+    });
 
     const coord = {
       x: lat.filter(Boolean)[0],
-      y: long.filter(Boolean)[0]
-    }
- 
+      y: long.filter(Boolean)[0],
+    };
+
     const map = L.map('map-' + this.props.elementId, {
       center: [coord.x, coord.y],
       zoom: 16,
@@ -70,7 +69,7 @@ export class TestTemplate extends React.Component<TemplateProps, {}> {
     if (map.tap) map.tap.disable();
     L.marker([coord.x, coord.y]).addTo(map);
   }
-  
+
   render(): JSX.Element {
     const propsAsList = this.props.propsAsList
       .map(({ name, id, property }) => {
