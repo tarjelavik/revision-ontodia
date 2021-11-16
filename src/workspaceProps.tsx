@@ -122,6 +122,7 @@ function onWorkspaceMounted(workspace: Workspace) {
     PREFIX dcterms:  <http://purl.org/dc/terms/>
     PREFIX o:  <http://omeka.org/s/vocabs/o#>
     PREFIX schema:  <http://schema.org/>
+    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
     `;
 
