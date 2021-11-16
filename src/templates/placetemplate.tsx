@@ -57,23 +57,23 @@ export class PlaceTemplate extends React.Component<TemplateProps, {}> {
       y: long.filter(Boolean)[0]
     }
 
-    const map = L.map('map-' + this.props.elementId, {
-      center: [coord.x, coord.y],
-      zoom: 16,
-      layers: [
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; OSM',
-        }),
-      ],
-    });
-    map.dragging.disable();
-    map.touchZoom.disable();
-    map.doubleClickZoom.disable();
-    map.scrollWheelZoom.disable();
-    map.boxZoom.disable();
-    map.keyboard.disable();
-    if (map.tap) map.tap.disable();
     if (coord.x && coord.y) {
+      const map = L.map('map-' + this.props.elementId, {
+        center: [coord.x, coord.y],
+        zoom: 16,
+        layers: [
+          L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OSM',
+          }),
+        ],
+      });
+      map.dragging.disable();
+      map.touchZoom.disable();
+      map.doubleClickZoom.disable();
+      map.scrollWheelZoom.disable();
+      map.boxZoom.disable();
+      map.keyboard.disable();
+      if (map.tap) map.tap.disable();
       L.marker([coord.x, coord.y]).addTo(map);
     }
   }
