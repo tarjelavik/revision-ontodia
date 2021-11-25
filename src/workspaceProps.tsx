@@ -143,7 +143,7 @@ function onWorkspaceMounted(workspace: Workspace) {
               | <http://purl.org/dc/terms/title>
               | <http://omeka.org/s/vocabs/o#title>
               | <http://schema.org/object>/<http://omeka.org/s/vocabs/o#title>
-              | <http://schema.org/name>/<http://omeka.org/s/vocabs/o#label> ?searchLabel.
+              | <http://purl.org/bdm2/name>/<http://omeka.org/s/vocabs/o#label> ?searchLabel.
             FILTER regex(?searchLabel, "\${text}", "i")
             `,
   };
@@ -156,7 +156,7 @@ function onWorkspaceMounted(workspace: Workspace) {
    * Add all strings used as labels in Birgitta dataset :-(
    */
   SparqlDialect.dataLabelProperty =
-    'rdfs:label|<http://purl.org/bdm2/shelfmark>|<http://purl.org/dc/terms/title>|<http://omeka.org/s/vocabs/o#title>|<http://schema.org/object>/<http://omeka.org/s/vocabs/o#title>|<http://schema.org/name>/<http://omeka.org/s/vocabs/o#label>';
+    'rdfs:label|<http://purl.org/bdm2/shelfmark>|<http://purl.org/dc/terms/title>|<http://omeka.org/s/vocabs/o#title>|<http://schema.org/object>/<http://omeka.org/s/vocabs/o#title>|<http://purl.org/bdm2/name>/<http://omeka.org/s/vocabs/o#label>';
 
   /**
    * Filter Omeka props
@@ -184,7 +184,7 @@ function onWorkspaceMounted(workspace: Workspace) {
      * Filter omeka objects
      */
     (SparqlDialect.filterRefElementLinkPattern =
-      'FILTER(?link NOT IN (<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, <http://omeka.org/s/vocabs/o#owner>, <http://omeka.org/s/vocabs/o#resource_template>, <http://omeka.org/s/vocabs/o#resource_class>)) . FILTER(?inst != <http://omeka.org/s/vocabs/o#Item>)');
+      'FILTER(?link NOT IN (<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, <http://omeka.org/s/vocabs/o#owner>, <http://omeka.org/s/vocabs/o#resource_template>, <http://omeka.org/s/vocabs/o#resource_class>, <http://omeka.org/s/vocabs/o#site>)) . FILTER(?inst != <http://omeka.org/s/vocabs/o#Item>)');
 
   /**
    * Add public endpoint and refer to our modified dialect
@@ -204,7 +204,7 @@ function onWorkspaceMounted(workspace: Workspace) {
       },
       SparqlDialect
     ),
-    diagram: JSON.parse(LZString.decompressFromBase64(birgittaDiagram)),
+    //diagram: JSON.parse(LZString.decompressFromBase64(birgittaDiagram)),
   };
 
   // load serialized data from URL if any
