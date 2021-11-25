@@ -199,7 +199,7 @@ function onWorkspaceMounted(workspace: Workspace) {
     dataProvider: new Ontodia.SparqlDataProvider(
       {
         endpointUrl:
-          'https://sparql.birgitta.uib.no/birgitta-revision-test/query',
+          'https://sparql.birgitta.uib.no/birgitta-revision/query',
         queryMethod: Ontodia.SparqlQueryMethod.GET,
       },
       SparqlDialect
